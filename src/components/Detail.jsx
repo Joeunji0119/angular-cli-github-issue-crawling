@@ -1,45 +1,41 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
-import Issue from "../components/Issue";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Octokit } from "octokit";
-import { TOKEN } from "../config";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import Loading from "../components/Loading";
-import Error from "../components/Error";
+import Loading from "./Loading";
+import Error from "./Error";
+import Issue from "./Issue";
+import { useLoading } from "../contexts/issueContext";
+import { useError } from "../contexts/issueContext";
+import { DetailApi } from "../api/client";
 
 const Detail = () => {
   const params = useParams();
   const id = params.id;
   const [issue, setIssue] = useState([]);
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useLoading([]);
+  const [error, setError] = useError([]);
 
-  const octokit = new Octokit({
-    auth: TOKEN.USER,
-  });
-
-  const DetailApi = async () => {
-    setLoading(true);
+  const DetailApii = () => {
+    setLoading((pre) => !pre);
     try {
-      const { data } = await octokit.request(`GET /repos/{owner}/{repo}/issues/${id}`, {
-        owner: "angular",
-        repo: "angular-cli",
+      DetailApi(id).then(({ data }) => {
+        setIssue(data);
+        setUser(data.user);
+        setLoading((pre) => !pre);
       });
-      setIssue(data);
-      setUser(data.user);
-      setLoading(false);
     } catch (err) {
-      setError(true);
+      setError((pre) => !pre);
       console.log(err);
     }
   };
+  console.log(loading);
 
   useEffect(() => {
-    DetailApi();
+    DetailApii();
   }, []);
   return (
     <DetailLayout>

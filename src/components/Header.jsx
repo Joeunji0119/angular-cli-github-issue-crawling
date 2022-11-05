@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-// import React from "react";
+
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
   const TogoMain = () => {
-    navigate("./");
+    navigate("/");
   };
   return <Layout onClick={TogoMain}>Angular / Angular-cli </Layout>;
 };

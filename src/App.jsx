@@ -1,20 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { IssueProvider } from "./contexts/issueContext";
-import Header from "./components/Header";
-import Main from "./pages/Main";
-import Detail from "./pages/Detail";
+import { ErrorProvider, IssueProvider, LoadingProvider } from "./contexts/issueContext";
+
+// import Detail from "./components/Detail";
+import Home from "./pages/Home";
+import DetailPage from "./pages/DetailPage";
 
 function App() {
   return (
-    <IssueProvider>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/:id" element={<Detail />} />
-        </Routes>
-      </BrowserRouter>
-    </IssueProvider>
+    <ErrorProvider>
+      <LoadingProvider>
+        <IssueProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:id" element={<DetailPage />} />
+            </Routes>
+          </BrowserRouter>
+        </IssueProvider>
+      </LoadingProvider>
+    </ErrorProvider>
   );
 }
 

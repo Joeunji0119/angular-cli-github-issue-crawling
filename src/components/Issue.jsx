@@ -1,15 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import { forwardRef } from "react";
 import { Advertisement } from "./Advertisement";
 
-const Issue = forwardRef(({ number, title, login, created_at, comments, idx }, ref) => {
+const Issue = ({ number, title, login, created_at, comments, idx }) => {
   return (
     <>
       {idx === 4 && <Advertisement />}
       <Link key={number} to={`/${number}`}>
-        <LayoutIssue ref={ref}>
+        <LayoutIssue>
           <IssueInfoBox>
             <IssueNumTitle>
               <IssueNum>#{number}</IssueNum>
@@ -25,7 +24,7 @@ const Issue = forwardRef(({ number, title, login, created_at, comments, idx }, r
       </Link>
     </>
   );
-});
+};
 
 export default Issue;
 
@@ -38,6 +37,7 @@ export const LayoutIssue = styled.div`
   justify-content: space-between;
   margin-top: 30px;
   z-index: 1;
+  color: black;
 
   @media (max-width: 1000px) {
     width: 700px;

@@ -1,52 +1,35 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import styled from "@emotion/styled";
-import Issue from "../components/Issue";
-import { TOKEN } from "../config";
-import { Octokit } from "octokit";
+import Issue from "./Issue";
 import { useIssue } from "../contexts/issueContext";
-import Loading from "../components/Loading";
+import { useLoading } from "../contexts/issueContext";
+import { useError } from "../contexts/issueContext";
+import Loading from "./Loading";
+import Error from "./Error";
+import { octokitApi, octokitPage1Api } from "../api/client";
 
 const Main = () => {
-  const [issue, setIssue] = useIssue({});
+  const [issue, setIssue] = useIssue([]);
+  const [loading, setLoading] = useLoading([]);
+  const [error, setError] = useError([]);
   const pageNum = useRef(1);
-  const [loading, setLoading] = useState(false);
-
-  const octokit = new Octokit({
-    auth: TOKEN.USER,
-  });
 
   useEffect(() => {
-    octokit
-      .request("GET /repos/{owner}/{repo}/issues", {
-        owner: "angular",
-        repo: "angular-cli",
-        state: "open",
-        sort: "comments",
-        per_page: 10,
-        page: 1,
-      })
-      .then((res) => {
-        setIssue(res.data);
-      });
+    octokitPage1Api().then(({ data }) => {
+      setIssue(data);
+    });
   }, []);
 
-  const octokitApi = async () => {
+  const octokitApii = () => {
     pageNum.current += 1;
     setLoading(true);
-    await octokit
-      .request("GET /repos/{owner}/{repo}/issues", {
-        owner: "angular",
-        repo: "angular-cli",
-        state: "open",
-        sort: "comments",
-        per_page: 10,
-        page: pageNum.current,
-      })
-      .then((res) => {
-        setIssue((prev) => [...prev, ...res.data]);
-      });
-    setLoading(false);
+    try {
+      octokitApi(pageNum.current, setIssue, setLoading);
+    } catch (err) {
+      setError(true);
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -61,7 +44,7 @@ const Main = () => {
         const clientHeight = document.documentElement.clientHeight;
 
         if (scrollHeight + scrollTop >= clientHeight - 10) {
-          octokitApi();
+          octokitApii();
         }
       }, 400);
     });
@@ -69,6 +52,7 @@ const Main = () => {
 
   return (
     <Layout>
+      {error ? <Error /> : null}
       {loading ? <Loading /> : null}
       <ListLayout>
         {issue.map((el, idx) => {
