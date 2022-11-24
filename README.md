@@ -1,64 +1,172 @@
-# Getting Started with Create React App
+# 특정 깃헙 레파지토리의 이슈 목록과 상세 내용을 확인하는 웹 사이트 구현
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### 원티드 프리온보딩 프론트엔드 1-2 주차 기업 협업 과제로 구현한 프로젝트입니다
 
-## Available Scripts
 
-In the project directory, you can run:
+</br>
 
-### `npm start`
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 프로젝트 실행 법
 
-### `npm run build`
+```
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+git token 발급 후 config.js에 USER : "발급 받은 token" 넣고
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+</br>
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+</br>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 구현 목록 & 구현 영상
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![preonBoarding_1](https://user-images.githubusercontent.com/95282989/203702906-cc5b838c-fb54-4b17-96fa-0606c80e2929.gif)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [x] 이슈 목록 및 상세 화면 기능 구현
+- [x] 상세 페이지 이동시 로딩 화면 구현
+- [x] 지정된 조건(코멘트 많은 순)에 맞게 데이터 요청 및 표시
+- [x] 스크롤 이벤트로 인피니티 스크롤 구현
 
-### Code Splitting
+</br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+</br>
 
-### Making a Progressive Web App
+## 사용 라이브러리
+</br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<img src="https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
+<img alt="octokit" src ="https://img.shields.io/badge/octokit-071D49?&style=flat&logo=Axios&logoColor=white"> <img alt="emotion" src ="https://img.shields.io/badge/Emotion-512BD4?&style=flat&logoColor=white"> <img alt="react-markdown" src="https://img.shields.io/badge/react_markdown-9999FF?&style=flat&logoColor=white"> 
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+</br>
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+</br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 폴더 구조
+
+
+```
+📦 src
+├── 📂 api
+│      └── 📜 client.js
+│ 
+├── 📂 components
+│       ├──📜 Advertisement.jsx
+│       ├──📜 Detail.jsx
+│       ├──📜 Error.jsx
+│       ├──📜 Detail.jsx
+│       ├──📜 Header.jsx
+│       ├──📜 Issue.jsx
+│       ├──📜 Loading.jsx
+│       └──📜 Main.jsx
+│  
+├── 📂 contexts
+│       └── 📜 issueContext.js.js
+│  
+├── 📂 Page
+│       ├──📜 DetailPage.jsx
+│       └──📜 Home.jsx
+│
+├── 📜 App.js
+├── 📜 config.js
+└── 📜 index.jsx
+
+```
+
+
+
+</br>
+
+
+## 무한 스크롤 구현
+
+
+```javascript
+// src/components/Main.jsx
+
+const pageNum = useRef(1);
+
+const octokitApii = () => {
+  pageNum.current += 1;
+  setLoading(true);
+  try {
+    octokitApi(pageNum.current, setIssue, setLoading);
+  } catch (err) {
+    setError(true);
+    console.log(err);
+  }
+};
+  
+```
+
+useRef를 사용해 pageNum를 변수로 만들어 초기값을 1로 지정, 후에 데이터를 받아올 때 1이 아닌 이후의 데이터를 받아올 수 있도록 1을 더해주도록 했습니다. 1이 더해진 값을 `octokitApi` 함수에 데이터와 로딩 state와 함께 인자로 넘겨 데이터를 받아오게 했습니다.
+
+<br/>
+
+```javascript
+// src/components/Main.jsx
+
+useEffect(() => {
+  let timer;
+  window.addEventListener("scroll", () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = document.documentElement.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
+
+      if (scrollHeight + scrollTop >= clientHeight - 10) {
+        octokitApii();
+      }
+    }, 400);
+  });
+}, []);
+  
+```
+
+
+스크롤 이벤트를 사용하여 무한스크롤 구현하였습니다. `timer` 변수 초기 값을 null로 지정하여 `useEffect`가 처음 실행될 땐 `clearTimeout` 은 실행되지 않게 했고 이후 스크롤 바가 하단에 있을 때 `setTimeout` 을 사용해 0.4초 후에 `octokitApii` 함수가 실행되도록 했습니다.
+
+
+</br>
+
+
+## 상세페이지의 마크다운 
+
+
+```javascript
+
+// src/components/Detail.jsx 
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+  <IssueBody>
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>{issue.body}</ReactMarkdown>
+  </IssueBody>
+
+```
+
+`ReactMarkdown` 라이브러리를 사용해 받아온 데이터의 마크 다운 문법을 렌더링 할 수 있도록 했습니다. link, table, checklist 등의 형식을 그리기 위해 추가로 `remark-gfm` 라이브러리를 사용했습니다.
+
+
+
+</br>
+
+
+
+
