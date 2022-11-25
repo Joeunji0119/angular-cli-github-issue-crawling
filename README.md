@@ -11,7 +11,7 @@
 ```
 npm install
 
-git token 발급 후 config.js에 USER : "발급 받은 token" 넣고
+git token 발급 후 config.js에 USER : "발급 받은 token" 추가
 
 npm start
 ```
@@ -31,7 +31,7 @@ npm start
 - [x] 이슈 목록 및 상세 화면 기능 구현
 - [x] 상세 페이지 이동시 로딩 화면 구현
 - [x] 스크롤 이벤트로 인피니티 스크롤 구현
-- [x] 다섯번째 항목에 광고 추가, 클릭 시 해당 사이트로 
+- [x] 다섯번째 항목에 광고 추가, 클릭 시 해당 사이트로 이동 로직 구현
 
 </br>
 
